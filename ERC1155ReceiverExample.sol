@@ -6,39 +6,45 @@ import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 /**
- * @dev Example receiver with ReentrancyGuard on hooks.
- * Note: nonReentrant on receive hooks protects against reentrancy
- * during token acceptance. Do not mark pure/view.
+ * @title ERC1155ReceiverExample
+ * @notice Minimal ERC-1155 token receiver with reentrancy protection.
+ * @dev Implements IERC1155Receiver + ERC-165.
+ *      Accepts all incoming single and batch transfers.
+ *      nonReentrant on hooks prevents reentrancy during receipt.
  */
 contract ERC1155ReceiverExample is ERC165, IERC1155Receiver, ReentrancyGuard {
+    /// @notice Handle receipt of a single ERC-1155 token type
+    /// @return Selector `0xf23a6e61` to accept the transfer
     function onERC1155Received(
-        address,
-        address,
-        uint256,
-        uint256,
-        bytes calldata
+        address /* operator */,
+        address /* from */,
+        uint256 /* id */,
+        uint256 /* value */,
+        bytes calldata /* data */
     ) external override nonReentrant returns (bytes4) {
-        return this.onERC1155Received.selector; // 0xf23a6e61
+        return this.onERC1155Received.selector;
     }
 
+    /// @notice Handle receipt of multiple ERC-1155 token types
+    /// @return Selector `0xbc197c81` to accept the batch transfer
     function onERC1155BatchReceived(
-        address,
-        address,
-        uint256[] calldata,
-        uint256[] calldata,
-        bytes calldata
+        address /* operator */,
+        address /* from */,
+        uint256[] calldata /* ids */,
+        uint256[] calldata /* values */,
+        bytes calldata /* data */
     ) external override nonReentrant returns (bytes4) {
-        return this.onERC1155BatchReceived.selector; // 0xbc197c81
+        return this.onERC1155BatchReceived.selector;
     }
 
+    /// @notice ERC-165 interface support
     function supportsInterface(bytes4 interfaceId)
         public
         view
         override(ERC165, IERC165)
         returns (bool)
     {
-        return
-            interfaceId == type(IERC1155Receiver).interfaceId ||
-            super.supportsInterface(interfaceId);
+        return interfaceId == type(IERC1155Receiver).interfaceId
+            || super.supportsInterface(interfaceId);
     }
 }

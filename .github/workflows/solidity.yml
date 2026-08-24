@@ -1,0 +1,26 @@
+name: Solidity CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+
+      - name: Install dependencies
+        run: forge install OpenZeppelin/openzeppelin-contracts --no-commit
+
+      - name: Compile contracts
+        run: forge build --contracts .
+
+      - name: Check compilation success
+        run: echo "Compilation completed"

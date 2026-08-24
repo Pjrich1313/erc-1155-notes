@@ -15,6 +15,20 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Cache Foundry dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.foundry
+            cache
+            out
+            lib
+          key: ${{ runner.os }}-foundry-${{ hashFiles('**/foundry.toml', '**/remappings.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-foundry-
 
       - name: Install dependencies
         run: forge install OpenZeppelin/openzeppelin-contracts --no-commit
@@ -23,4 +37,4 @@ jobs:
         run: forge build --contracts .
 
       - name: Check compilation success
-        run: echo "Compilation completed"
+        run: echo "Compilation completed successfully"

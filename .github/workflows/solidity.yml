@@ -2,13 +2,16 @@ name: Solidity CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-  build:
+  check:
+    name: Build and test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
       - uses: actions/checkout@v4
@@ -16,25 +19,15 @@ jobs:
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
-          version: nightly
-
-      - name: Cache Foundry dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.foundry
-            cache
-            out
-            lib
-          key: ${{ runner.os }}-foundry-${{ hashFiles('**/foundry.toml', '**/remappings.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-foundry-
+          version: stable
 
       - name: Install dependencies
-        run: forge install OpenZeppelin/openzeppelin-contracts --no-commit
+        run: |
+          forge install foundry-rs/forge-std@v1.9.4 --no-commit
+          forge install OpenZeppelin/openzeppelin-contracts@v5.0.2 --no-commit
 
-      - name: Compile contracts
-        run: forge build --contracts .
+      - name: Build
+        run: forge build --skip test
 
-      - name: Check compilation success
-        run: echo "Compilation completed successfully"
+      - name: Test
+        run: forge test -vvv

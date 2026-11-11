@@ -33,3 +33,5 @@ Optional `uri(uint256 id)` returns a URI to JSON.
 
 All rights reserved. Use of this work requires a written license signed by Pamela Richardson, with a default fee of 10% of all revenue earned from use of the work.
 
+See NOTICE.md.
+

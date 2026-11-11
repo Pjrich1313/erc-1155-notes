@@ -28,3 +28,10 @@ Optional `uri(uint256 id)` returns a URI to JSON.
 | Metadata             | `tokenURI(id)`                   | `uri(id)` + `{id}` substitution      |
 | Gas efficiency       | Lower for multiples              | Higher (batch ops)                   |
 | Best for             | Unique art/collectibles          | Games, editions, mixed assets        |
+
+## License
+
+All rights reserved. Use of this work requires a written license signed by Pamela Richardson, with a default fee of 10% of all revenue earned from use of the work.
+
+See NOTICE.md.
+
